@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Oct  2 12:45:02 2018
+
+@author: navidzebarjadi
+"""
+
+
+import numpy as np
+import pandas as pd
+import string
+
+
+tecan = pd.read_csv("TecanFile.txt", delimiter="\t", skiprows=30, skipfooter=1)
+tecan.to_csv('FinalTecan.csv', index=False)
+
+
+alpha_string = string.ascii_uppercase
+number_list = list(range(0, 14))
+#print (alpha_string[1])
+print (number_list)
+
+print (tecan.loc[2][2])
+print ('\n')
+
+tecan_arr = np.empty([8, 1])
+tecan_indexed = pd.DataFrame(tecan_arr)
+#tecan_indexed.columns = ['Well', 'Fluor']
+
+for i in range(0,8):
+    print ('\n')
+    for j in range(1,13):
+        print (alpha_string[i] + str(number_list[j]))
+        #tecan_indexed['Well'].apply(lambda x : x[i][j])
+        
+        
+        print (tecan.loc[i][j])
+        
+        tecan_indexed.ix[i,j] = (alpha_string[i] + str(number_list[j])) + ', ' + str(tecan.loc[i][j])
+        
+        
+        
+        tecan_indexed = tecan_indexed.transform(lambda x: x.replace(chr(34), ""))
+        
+        
+        tecan_final_indexed = tecan_indexed.apply(lambda x: x.replace(chr(34), "\t"))
+        
+        #ystring = lambda y : y[i][j]
+        
+        #tecan_indexed[i][j].apply(lambda i, j: tecan[i][j])
+        
+        #tecan_indexed = np.append(tecan_indexed, )
+        
+        #lambda tecan_indexed : tecan_indexed[i][j]
+        
+        #tecan_indexed.loc[i][j] = (alpha_string[i] + str(number_list[j]))
+        
+        #tecan_indexed[i][j].append(pd.DataFrame(tecan[i][j]))
+        #tecan_indexed.to_csv('TecanIndexed.csv', index=False)
+
+print ("\nHERE IT IS")
+print (tecan_indexed)
+tecan_final_indexed.to_csv('FinalTecanIndexed.csv', index=False)
+
+"""
+tecan = pd.read_csv("TecanFile.txt", delimiter="\t", header=24, footer=1)
+tecan.to_csv('FinalTecan.csv', index=False)
+
+
+for index, row in tecan.iterrows():
+    print (row[1], row[2])
+print ("\n")
+"""
+
+
+
+
+
+"""
+tecan = pd.read_table('TecanFile.txt')
+print ("\nTecan File\n")
+"""
+"""
+for i, r in tecan.iterrows():
+    print (r)
+print ("\n")
+"""
+
+class CsvIngest:
+    
+    manifest = pd.read_csv('PASS_Generic.csv')
+    manifest['Well'] = manifest['Position'].apply(lambda x: x [::-1])
+    print ("\nManifest\n")
+    for i, r in manifest.iterrows():
+        print (r['Well'])
+
+    fullMicronic = pd.read_csv('Micronic2D_Generic.csv', header=None)
+    OneDScan = fullMicronic.iat[0, 3]
+    print ("\nThe 1D Scan value is " + OneDScan + ".")
+
+    micronic = pd.read_csv('Micronic2D_Generic.csv', skiprows=1, skipfooter=1)
+    micronic['Well'] = micronic['Position'].apply(lambda x: x.replace(chr(48), ""))
+
+    print ("\nMicronic\n")
+    for i, r in micronic.iterrows():
+        print (r['Well'])
+    
+    FragRNA = pd.read_csv('FragmentAnalyzerRNA_Generic.csv')
+    print ("\nFragment Analyzer: RNA\n")
+    for i, r in FragRNA.iterrows(): #i stands for "index," r for "row" I think.
+        print (r['Well'])
+        
+    FragDNA = pd.read_csv('FragmentAnalyzerDNA_Generic.csv')
+    print ("\nFragment Analyzer: DNA\n")
+    for i, r in FragDNA.iterrows(): #i stands for "index," r for "row" I think.
+        print (r['Well'])
+    print ("\n")
+    
+#class PassManifest(CsvInget):
+    
+
+
